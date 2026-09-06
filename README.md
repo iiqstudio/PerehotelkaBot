@@ -29,7 +29,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 cp .env.example .env
-python -m app.main
+python main.py
 ```
 
 Заполните `.env`:
@@ -40,6 +40,10 @@ ALLOWED_USER_IDS=111111111,222222222
 TIMEZONE=Europe/Moscow
 DATABASE_PATH=data/bot.db
 ```
+
+On Bothost set the Telegram token in the bot token field. The code accepts
+`BOT_TOKEN`, `TELEGRAM_BOT_TOKEN`, or `TOKEN`; set `ALLOWED_USER_IDS`,
+`TIMEZONE`, and `DATABASE_PATH` in environment variables.
 
 ## Docker
 

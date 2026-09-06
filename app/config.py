@@ -24,7 +24,12 @@ class Settings:
 
 def load_settings() -> Settings:
     load_dotenv()
-    token = os.getenv("BOT_TOKEN", "")
+    token = (
+        os.getenv("BOT_TOKEN")
+        or os.getenv("TELEGRAM_BOT_TOKEN")
+        or os.getenv("TOKEN")
+        or ""
+    )
     raw_ids = os.getenv("ALLOWED_USER_IDS", "")
     timezone = os.getenv("TIMEZONE", "Europe/Moscow")
     database_path = os.getenv("DATABASE_PATH", "data/bot.db")
