@@ -44,7 +44,7 @@ DATABASE_PATH=data/bot.db
 ## Docker
 
 ```bash
-docker build -t purchase-quarantine-bot .
+docker build -f docker/Dockerfile -t purchase-quarantine-bot .
 docker run -d --restart unless-stopped --env-file .env -v "$(pwd)/data:/app/data" purchase-quarantine-bot
 ```
 
