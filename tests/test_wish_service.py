@@ -99,3 +99,20 @@ async def test_statistics_are_per_user(session_factory) -> None:
         assert stats["total"] == 1
         assert stats["cancelled"] == 1
         assert stats["saved"] == 15000
+
+
+async def test_statistics_for_unknown_user_are_empty(session_factory) -> None:
+    async with session_factory() as session:
+        stats = await stats_for_user(session, 999)
+
+    assert stats == {
+        "total": 0,
+        "active": 0,
+        "cancelled": 0,
+        "purchased": 0,
+        "cancelled_percent": 0,
+        "saved": 0,
+        "spent": 0,
+        "useful": 0,
+        "useless": 0,
+    }

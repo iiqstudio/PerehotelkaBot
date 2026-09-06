@@ -200,7 +200,10 @@ async def record_notification(session: AsyncSession, wish_id: int, event_type: s
 
 async def stats_for_user(session: AsyncSession, telegram_id: int) -> dict[str, int | float]:
     result = await session.execute(select(User.id).where(User.telegram_id == telegram_id))
-    user_id = result.scalar_one()
+    user_id = result.scalar_one_or_none()
+    if user_id is None:
+        return empty_stats()
+
     total = await session.scalar(select(func.count(Wish.id)).where(Wish.user_id == user_id)) or 0
     active = await session.scalar(
         select(func.count(Wish.id)).where(Wish.user_id == user_id, Wish.status.in_([s.value for s in ACTIVE_STATUSES]))
@@ -245,4 +248,18 @@ async def stats_for_user(session: AsyncSession, telegram_id: int) -> dict[str, i
         "spent": int(spent),
         "useful": useful,
         "useless": useless,
+    }
+
+
+def empty_stats() -> dict[str, int | float]:
+    return {
+        "total": 0,
+        "active": 0,
+        "cancelled": 0,
+        "purchased": 0,
+        "cancelled_percent": 0,
+        "saved": 0,
+        "spent": 0,
+        "useful": 0,
+        "useless": 0,
     }
