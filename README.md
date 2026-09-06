@@ -27,6 +27,7 @@ Telegram-бот для паузы между импульсом купить в�
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
 cp .env.example .env
 python -m app.main
 ```
