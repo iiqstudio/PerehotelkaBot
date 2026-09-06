@@ -22,6 +22,17 @@ LISTS = {
     "❌ Отменённые": {WishStatus.CANCELLED},
 }
 
+STATUS_LABELS = {
+    WishStatus.WAITING_FIRST_REVIEW.value: "ожидает первой проверки",
+    WishStatus.WAITING_QUARANTINE.value: "на карантине",
+    WishStatus.READY_FOR_DECISION.value: "готово к решению",
+    WishStatus.RESEARCHING.value: "выбор вариантов",
+    WishStatus.FINAL_PAUSE.value: "финальная пауза",
+    WishStatus.DECIDED_TO_BUY.value: "решил купить",
+    WishStatus.PURCHASED.value: "куплено",
+    WishStatus.CANCELLED.value: "отменено",
+}
+
 
 @router.message(F.text.in_(LISTS.keys()))
 async def show_list(message: Message, session: AsyncSession, settings: Settings) -> None:
@@ -41,10 +52,14 @@ def wish_card(wish: Wish, settings: Settings) -> str:
         f"<b>{h(wish.title)}</b>\n"
         f"≈ {h(money(wish.estimated_price))}\n"
         f"Тип: {h(wish.purchase_type.lower())}\n"
-        f"Статус: {h(wish.status)}\n"
+        f"Статус: {h(status_label(wish.status))}\n"
         f"Создано: {created}\n"
         f"До решения: {left}"
     )
+
+
+def status_label(status: str) -> str:
+    return STATUS_LABELS.get(status, status)
 
 
 def wish_keyboard(wish: Wish):
